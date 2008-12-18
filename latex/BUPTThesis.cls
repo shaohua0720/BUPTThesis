@@ -196,6 +196,9 @@
 \RequirePackage{bm}             % 加粗符号使用 \boldsymbol
 \fi
 
+%%% 条件公式
+\RequirePackage{cases}           % 使用 cases 宏包以支持子公式编号的条件公式
+
 %%% 图形支持
 \RequirePackage[dvips]{graphicx} % 使用 dvips 驱动的 graphicx 宏包
 \RequirePackage{subfigure}       % 使用 subfigure 宏包处理子图
@@ -538,7 +541,7 @@
 %\def\BUPT@make@df@tag@@#1{%
 %  \gdef\df@tag{\BUPT@maketag{#1}\def\@currentlabel{#1}}}
 % redefinitation of tagform broken eqref!
-\renewcommand{\eqref}[1]{\textup{\ref{#1}}}
+\renewcommand{\eqref}[1]{\textup{(\ref{#1})}}
 \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter-\fi\@arabic\c@equation}
 \renewcommand\thefigure{\ifnum \c@chapter>\z@ \thechapter-\fi\@arabic\c@figure}
 \renewcommand\thetable{\ifnum \c@chapter>\z@ \thechapter-\fi\@arabic\c@table}
@@ -1278,3 +1281,9 @@
 \def\@begindocumenthook{\BUPT@begindocumenthook\BUPT@beginCJK}
 \def\@enddocumenthook{\BUPT@endCJK\BUPT@enddocumenthook}
 \AtBeginDocument{\BUPT@item@space}
+
+\newcommand{\upd}{\mathrm{d}}
+\newcommand{\upj}{\mathrm{j}}
+\newcommand{\upe}{\mathrm{e}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\CT}{\mathrm{H}}
