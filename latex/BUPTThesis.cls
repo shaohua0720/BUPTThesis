@@ -306,11 +306,11 @@
 }
 % 重载 \glsdisplayfirst 命令
 \renewcommand{\glsdisplayfirst}[4]{
-  \!\CJKchar{"0FF}{"008}%
+  \!\CJKchar{"0FF}{"008}% 中文括号“（”
   \!{#2}% 
-  \CJKchar{"0FF}{"00C}%
+  \CJKchar{"0FF}{"00C}% 全宽逗号“，”
   \!{#1}% 
-  \!\CJKchar{"0FF}{"009}%
+  \!\CJKchar{"0FF}{"009}% 中文括号“）”
 }
 
 \renewcommand{\glsdefaulttype}{acronym}
@@ -509,9 +509,21 @@
 \MakePerPage{footnote}
 %% 脚注带圈数字
 \def\BUPT@textcircled#1{%
-  \ifnum \value{#1} <10 \textcircled{\xiaoliu\arabic{#1}}
-  \else\ifnum \value{#1} <100 \textcircled{\qihao\arabic{#1}}\fi
-  \fi}
+  % 1~10的带圈数字直接使用字库中的带圈数字
+  \ifnum \value{#1} = 1 \CJKchar{"024}{"060}
+  \else\ifnum \value{#1} = 2 \CJKchar{"024}{"061}
+  \else\ifnum \value{#1} = 3 \CJKchar{"024}{"062}
+  \else\ifnum \value{#1} = 4 \CJKchar{"024}{"063}
+  \else\ifnum \value{#1} = 5 \CJKchar{"024}{"064}
+  \else\ifnum \value{#1} = 6 \CJKchar{"024}{"065}
+  \else\ifnum \value{#1} = 7 \CJKchar{"024}{"066}
+  \else\ifnum \value{#1} = 8 \CJKchar{"024}{"067}
+  \else\ifnum \value{#1} = 9 \CJKchar{"024}{"068}
+  \else\ifnum \value{#1} = 10 \CJKchar{"024}{"069}
+  % 11~99的带圈数字
+  \else\ifnum \value{#1} <100 \textcircled{\qihao\arabic{#1}}
+  \fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
+}
 \renewcommand{\thefootnote}{\BUPT@textcircled{footnote}}
 \renewcommand{\thempfootnote}{\BUPT@textcircled{mpfootnote}}
 \def\footnoterule{\vskip-3\p@\hrule\@width0.3\textwidth\@height0.4\p@\vskip2.6\p@}
