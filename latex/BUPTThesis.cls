@@ -521,8 +521,8 @@
   \else\ifnum \value{#1} = 9 \CJKchar{"024}{"068}
   \else\ifnum \value{#1} = 10 \CJKchar{"024}{"069}
   % 11~99的带圈数字
-  \else\ifnum \value{#1} <100 \textcircled{\qihao\arabic{#1}}
-  \fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
+  \else \textcircled{\qihao\arabic{#1}}
+  \fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
 }
 \renewcommand{\thefootnote}{\BUPT@textcircled{footnote}}
 \renewcommand{\thempfootnote}{\BUPT@textcircled{mpfootnote}}
@@ -577,9 +577,16 @@
   \@endparenv
   \fi #1}
 %%% 定理是用黑体，正文使用宋体，用冒号隔开
+\renewtheoremstyle{plain}%
+{\item[\hskip\labelsep \theorem@headerfont ##1\ ##2\theorem@separator]}%
+{\item[\hskip\labelsep \theorem@headerfont ##1\ ##2\ \CJKchar{"0FF}{"008}##3\CJKchar{"0FF}{"009}\!\theorem@separator\!]}
+\renewtheoremstyle{nonumberplain}%
+{\item[\theorem@headerfont\hskip\labelsep ##1\theorem@separator]}%
+{\item[\theorem@headerfont\hskip \labelsep ##1\ \CJKchar{"0FF}{"008}##3\CJKchar{"0FF}{"009}\!\theorem@separator\!]}
 \theoremstyle{plain}
+
 \theorembodyfont{\song\rmfamily}
-\theoremheaderfont{\hei\rmfamily}
+\theoremheaderfont{\hei\bfseries}
 % \theoremsymbol{\ensuremath{\blacksquare}}
 \theoremsymbol{}
 %%% 浮动对象及表格
