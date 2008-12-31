@@ -195,6 +195,8 @@
                                 % \mathcal  使用 Math Calligraphic 字体
 \RequirePackage{bm}             % 加粗符号使用 \boldsymbol
 \fi
+\RequirePackage[low-sup]{subdepth}       
+                                % 使用 Subdepth 宏包, 调整上下标位置
 
 %%% 条件公式
 \RequirePackage{cases}           % 使用 cases 宏包以支持子公式编号的条件公式
