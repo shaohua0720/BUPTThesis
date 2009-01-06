@@ -1050,15 +1050,15 @@
   }
 }
 %% 攻读学位期间发表的学术论文目录
-\newenvironment{tableofpublications}[1]{
+\newenvironment{tableofpublications}{
   \cleardoublepage       % 从奇数页开始
   % [<tocline>]{<title>}[<titlesize>][<prefix>]
   \BUPT@chapter*[\BUPT@tableofpublications@name]{\BUPT@tableofpublications@name} % 学术论文目录标题
-  \nobibliography{IEEEabrv,#1}
-  \begin{enumerate}[{[}1{]}]
+%  \nobibliography{IEEEabrv,#1}
+%  \begin{enumerate}[{[}1{]}]
 }
 {
-  \end{enumerate}
+%  \end{enumerate}
 }
 
 %% 符号说明
