@@ -29,7 +29,6 @@ set PSPDFOPT=-dSAFER -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dCompatibilityLev
 
 
 %LATEX% %TARGET%
-SET
 for %%i in %MAINMATTER% do %BIBTEX% %%i
 
 %LATEX% %TARGET%
