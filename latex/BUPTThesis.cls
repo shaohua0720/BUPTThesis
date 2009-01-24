@@ -277,8 +277,11 @@
 \fi
 
 %%% 书签支持
-\RequirePackage[usenames,dvipsnames,dvips]{xcolor}
+\RequirePackage[usenames,dvipsnames,dvips,cmyk]{xcolor}
 \RequirePackage[unicode,a4paper,dvips,colorlinks=true,linkcolor=Blue,citecolor=Mahogany,citebordercolor=white]{hyperref}
+
+%%% 使用 breakurl 支持对长链接的自动换行
+\RequirePackage{breakurl}
 
 %%% 自动产生缩略语表
 \RequirePackage[toc,section=chapter]{glossaries}
@@ -1262,8 +1265,8 @@
     \catcode\count@=\active
     \lowercase{\def~{\kern1ex}}}}
 
-%% 在文档模版结束后加载配置文件 BUPTthesis.cfg
-\AtEndOfClass{\BUPT@active@cjk\input{BUPTthesis.cfg}}
+%% 在文档模版结束后加载配置文件 BUPTThesis.cfg
+\AtEndOfClass{\BUPT@active@cjk\input{BUPTThesis.cfg}}
 
 %% 解决selectfont冲突
 \def\BUPT@fixselectfont{%
