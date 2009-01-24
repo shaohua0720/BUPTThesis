@@ -1,10 +1,10 @@
 %% BUPTThesis.bst
 %%
-%% 北京邮电大学研究生学位论文参考文献BibTeX样式
+%% 北京邮电大学研究生学位论文参考文献 BibTeX 样式
 %% 
 %% 项目主页：http://code.google.com/p/buptthesis/
 %% 
-%% 本文档类基于 ThuThesis.cls 修改而成，基本满足北京邮电大学研究生论文格式要求
+%% 本样式基于 ThuThesis 修改而成，基本满足北京邮电大学研究生论文格式要求
 %%
 %% 作者：
 %% 张煜 (email:dazzlezhang@gmail.com)
@@ -615,7 +615,7 @@ FUNCTION {format.electronic.publication}
     { address 
       publisher empty$
 	'skip$
-	{ ": " * publisher * ", " * }
+	  { ": " * publisher * }
       if$
     }
   if$
@@ -623,8 +623,7 @@ FUNCTION {format.electronic.publication}
   % 出版年
   year empty$
     'skip$
-%    { ", " * year * }
-    { "" * year * }
+    { ", " * year * }
   if$
 
   % 更新或修改日期
@@ -871,6 +870,7 @@ FUNCTION {format.edition}
     }
   if$
 }
+
 
 FUNCTION {format.url}
 { url empty$
@@ -1295,7 +1295,6 @@ FUNCTION {periodical} {
   fin.entry
 }
 
-% 标准
 FUNCTION {standard} { output.bibitem
   organization empty$
     { format.institution "organization and institution" output.check }
