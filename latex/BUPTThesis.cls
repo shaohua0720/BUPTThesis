@@ -79,26 +79,6 @@
   \BUPT@secretlvl@classifiedfalse
   \BUPT@secretlvl@mostconfidentialtrue}
 
-% 因为已经指定了默认选项，下面检查密级选项是否指定的判断就不需要了
-% % 检查是否指定密级选项
-% \AtEndOfClass{%
-%   \ifBUPT@secretlvl@open\relax\else
-%   \ifBUPT@secretlvl@control\relax\else
-%   \ifBUPT@secretlvl@confidential\relax\else
-%   \ifBUPT@secretlvl@classified\relax\else
-%   \ifBUPT@secretlvl@mostconfidential\relax\else
-%   \ClassError{BUPTthesis}{%
-%     You have to specify one of secret levels: open, control, confidential, classified, or mostconfidential.}{}
-%   \fi\fi\fi\fi\fi
-
-%   \ifBUPT@sectionbib
-%   \typeout{Bibliography will be typeset in the last section of each chapter.}
-%   \fi
-%   \ifBUPT@chapterbib
-%   \typeout{Bibliography will be typeset in the last chapter.}
-%   \fi
-% }
-
 %%% 参考文献格式选项 (*sectbib*, chapbib)
 \newif\ifBUPT@sectbib\BUPT@sectbibtrue
 \newif\ifBUPT@chapbib\BUPT@chapbibfalse
@@ -111,7 +91,7 @@
   \BUPT@sectbibfalse
 }
 
-%%% 数学字体选项 (mathptmx, *mathtime*)
+%%% 数学字体选项 (*mathptmx*, mathtime)
 \newif\ifBUPT@mathtime\BUPT@mathtimefalse
 \newif\ifBUPT@mathptmx\BUPT@mathptmxtrue
 \DeclareOption{mathtime}{       % 数学字体使用 MathTime
@@ -233,29 +213,6 @@
 \RequirePackage{caption}
 \RequirePackage{everysel}
 
-%%% 代码清单环境
-\RequirePackage{listings}
-\lstset{                                          % 默认代码清单环境格式
-  extendedchars=false,                            % CJK 环境下禁用扩展字符
-  aboveskip=12pt,                                 % 
-  belowskip=12pt,                                 %
-  numbers=left, numberstyle=\scriptsize\ttfamily, %
-  basicstyle=\xiaowu[1.5]\ttfamily,               %
-  keywordstyle=\color{Black},                     %\color{Purple},
-  stringstyle=\ttfamily,                          %
-  identifierstyle=\color{Black},                  %\color{NavyBlue}, %
-  commentstyle=\it\ttfamily\kai\color{Black},     %\color{BrickRed}, %
-  backgroundcolor=\color{White},                  %
-  frame=lines,                                    %
-  framerule=0.5pt,                                %
-  linewidth=155mm,                                %
-  xleftmargin=17.5mm,                             %
-  xrightmargin=17.5mm,                            %
-  breaklines=true,                                %
-  breakatwhitespace=true,                         %
-  breakindent=0pt                                 %
-}
-
 %%% 参考文献
 \RequirePackage{url}
 \RequirePackage{bibentry}
@@ -278,7 +235,12 @@
 
 %%% 书签支持
 \RequirePackage[usenames,dvipsnames,dvips,cmyk]{xcolor}
-\RequirePackage[unicode,a4paper,dvips,colorlinks=true,linkcolor=Blue,citecolor=Mahogany,citebordercolor=white]{hyperref}
+\ifBUPT@online
+\RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=Blue,citecolor=Blue,citebordercolor=white,urlcolor=Mahogany]{hyperref}
+\else
+\RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=black,citecolor=black,citebordercolor=white,urlcolor=black]{hyperref}
+%\def\pdfBorderAttrs{/Border [0 0 0] } % No border arround Links 
+\fi
 
 %%% 使用 breakurl 支持对长链接的自动换行
 \RequirePackage{breakurl}
@@ -826,7 +788,7 @@
 %% 字距
 \newcommand*{\ziju}[1]{\renewcommand{\CJKglue}{\hskip #1}}
 %% 破折号
-\newcommand{\pozhehao}{\kern0.3ex\rule[0.8ex]{2em}{0.1ex}\kern0.3ex}
+\newcommand{\pozhehao}{\kern0.3ex\rule[0.8ex]{\CJKtwospaces}{0.25bp}\kern0.3ex}
 %% 关键字间隔
 \newcommand{\keyspace}{\hspace{2em}}
 %%% 封面和封底
