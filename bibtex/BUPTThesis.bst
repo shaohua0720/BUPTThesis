@@ -820,10 +820,10 @@ FUNCTION {format.names} {
   { s nameptr 			% 选择第 nameptr 个姓名
     name.format.string		% 按 name.format.string 的格式排版
     format.name$		% 调用 format.name$
-    language empty$		
-      {	"u" change.case$ }	% 如果不是语言为空, 做大写转换
-      {	skip$ }
-    if$				% <language 判断结束>
+%     language empty$		
+%       {	"u" change.case$ }	% 如果不是语言为空, 做大写转换
+%       {	skip$ }
+%     if$				% <language 判断结束>
     remove.period		% 并删除缩写符号'.'
     't :=			% 格式化后的姓名暂存于 t
     nameptr #1 >
@@ -1851,6 +1851,7 @@ FUNCTION {book} {
   format.translators             output		   % 其他责任者(可选)
   format.edition                 output		   % 版本项
   format.address.publisher.year  output.nonnull	   %
+  format.reference.date          output		   % 
   format.url                     output		   % 获取或访问路径
   format.note                    output		   % 备注  
 
