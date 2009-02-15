@@ -146,8 +146,8 @@
 \RequirePackage{calc}
 
 %%% 使用扩展 T1 与 TS1 编码
-%\RequirePackage[T1]{fontenc}
-%\RequirePackage{textcomp}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{textcomp}
 
 %%% 字体设置
 \ifBUPT@mathptmx                % mathptmx 选项
@@ -164,7 +164,7 @@
 \RequirePackage[scaled=.92]{helvet} 
                                 % sans-serif 字体使用 Helvetica
 \RequirePackage{amsmath}        % 使用 AMSTeX 数学宏包
-\RequirePackage[subscriptcorrection,slantedGreek,nofontinfo,boldalphabet]{mtpro}
+\RequirePackage[subscriptcorrection,slantedGreek]{mtpro}
                                 % 使用 MathTime Professional 字体
 \RequirePackage[mtphrb]{mtpams} % 使用 MathTime Professional Supplement A 字体
                                 % blackboard bold 字体使用 holey roman bold
@@ -346,6 +346,7 @@
 \BUPT@define@fontsize{qihao}{5.5bp}    % 七号
 \BUPT@define@fontsize{bahao}{5bp}      % 八号
 \BUPT@define@fontsize{covertitlesize}{32bp}
+\BUPT@define@fontsize{annotationsize}{8pt} % 图中标注文字使用8pt
 %%% 默认字号小四
 \renewcommand\normalsize{%
   \@setfontsize\normalsize{12bp}{20bp}
