@@ -173,7 +173,23 @@
                                 % \mathscr  使用 Math Script 字体
                                 % \mathfrak 使用 Math Fraktur 字体
                                 % \mathcal  使用 Math Calligraphic 字体
+%\newcommand\hmmax{0}
 \RequirePackage{bm}             % 加粗符号使用 \boldsymbol
+\DeclareSymbolFont{digits}{\encodingdefault}{ptm}{m}{n}
+\SetSymbolFont{digits}{bold}{\encodingdefault}{ptm}{b}{n}
+\DeclareMathSymbol{0}{\mathalpha}{digits}{"30}
+\DeclareMathSymbol{1}{\mathalpha}{digits}{"31}
+\DeclareMathSymbol{2}{\mathalpha}{digits}{"32}
+\DeclareMathSymbol{3}{\mathalpha}{digits}{"33}
+\DeclareMathSymbol{4}{\mathalpha}{digits}{"34}
+\DeclareMathSymbol{5}{\mathalpha}{digits}{"35}
+\DeclareMathSymbol{6}{\mathalpha}{digits}{"36}
+\DeclareMathSymbol{7}{\mathalpha}{digits}{"37}
+\DeclareMathSymbol{8}{\mathalpha}{digits}{"38}
+\DeclareMathSymbol{9}{\mathalpha}{digits}{"39}
+\DeclareMathDelimiter{\lbrace}{\mathopen}{digits}{"7B}{largesymbols}{"08}
+\DeclareMathDelimiter{\rbrace}{\mathclose}{digits}{"7D}{largesymbols}{"09}
+\SetMathAlphabet{\mathnormal}{normal}{\encodingdefault}{ptm}{m}{it}
 \fi
 \RequirePackage[low-sup]{subdepth}       
                                 % 使用 Subdepth 宏包, 调整上下标位置
@@ -743,7 +759,7 @@
 
 %% 目录格式
 \setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
 \renewcommand\tableofcontents{%
   \BUPT@chapter*[]{\contentsname}
   \normalsize\@starttoc{toc}}
