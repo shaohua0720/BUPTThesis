@@ -125,6 +125,18 @@
   \BUPT@onlinetrue
 }
 
+%%% 献辞页 (*nodedication*, dedication)
+\newif\ifBUPT@nodedication\BUPT@nodedicationtrue
+\newif\ifBUPT@dedication\BUPT@dedicationfalse
+\DeclareOption{nodedication}{
+  \BUPT@nodedicationtrue
+  \BUPT@dedicationfalse
+}
+\DeclareOption{dedication}{
+  \BUPT@nodedicationfalse
+  \BUPT@dedicationtrue
+}
+
 %%% 设置默认类选项 (博士学位, 公开级, 参考文献列于各章末尾, 无题名页, 打印版本)
 \ExecuteOptions{doctor,open,sectbib,mathptmx,notitlepage,print}
 
@@ -175,20 +187,20 @@
                                 % \mathcal  使用 Math Calligraphic 字体
 %\newcommand\hmmax{0}
 \RequirePackage{bm}             % 加粗符号使用 \boldsymbol
-\DeclareSymbolFont{digits}{\encodingdefault}{ptm}{m}{n}
-\SetSymbolFont{digits}{bold}{\encodingdefault}{ptm}{b}{n}
-\DeclareMathSymbol{0}{\mathalpha}{digits}{"30}
-\DeclareMathSymbol{1}{\mathalpha}{digits}{"31}
-\DeclareMathSymbol{2}{\mathalpha}{digits}{"32}
-\DeclareMathSymbol{3}{\mathalpha}{digits}{"33}
-\DeclareMathSymbol{4}{\mathalpha}{digits}{"34}
-\DeclareMathSymbol{5}{\mathalpha}{digits}{"35}
-\DeclareMathSymbol{6}{\mathalpha}{digits}{"36}
-\DeclareMathSymbol{7}{\mathalpha}{digits}{"37}
-\DeclareMathSymbol{8}{\mathalpha}{digits}{"38}
-\DeclareMathSymbol{9}{\mathalpha}{digits}{"39}
-\DeclareMathDelimiter{\lbrace}{\mathopen}{digits}{"7B}{largesymbols}{"08}
-\DeclareMathDelimiter{\rbrace}{\mathclose}{digits}{"7D}{largesymbols}{"09}
+% \DeclareSymbolFont{digits}{\encodingdefault}{ptm}{m}{n}
+% \SetSymbolFont{digits}{bold}{\encodingdefault}{ptm}{b}{n}
+% \DeclareMathSymbol{0}{\mathalpha}{digits}{"30}
+% \DeclareMathSymbol{1}{\mathalpha}{digits}{"31}
+% \DeclareMathSymbol{2}{\mathalpha}{digits}{"32}
+% \DeclareMathSymbol{3}{\mathalpha}{digits}{"33}
+% \DeclareMathSymbol{4}{\mathalpha}{digits}{"34}
+% \DeclareMathSymbol{5}{\mathalpha}{digits}{"35}
+% \DeclareMathSymbol{6}{\mathalpha}{digits}{"36}
+% \DeclareMathSymbol{7}{\mathalpha}{digits}{"37}
+% \DeclareMathSymbol{8}{\mathalpha}{digits}{"38}
+% \DeclareMathSymbol{9}{\mathalpha}{digits}{"39}
+% \DeclareMathDelimiter{\lbrace}{\mathopen}{digits}{"7B}{largesymbols}{"08}
+% \DeclareMathDelimiter{\rbrace}{\mathclose}{digits}{"7D}{largesymbols}{"09}
 \SetMathAlphabet{\mathnormal}{normal}{\encodingdefault}{ptm}{m}{it}
 \fi
 \RequirePackage[low-sup]{subdepth}       
@@ -990,6 +1002,10 @@
 %    \BUPT@doctor@engcover
     \BUPT@makedeclauth          % 创新性声明与授权说明页
   \end{titlepage}
+% 生成献辞
+  \ifBUPT@dedication
+  \BUPT@makededication          % 文前献辞
+  \fi
   \cleardoublepage
   \normalsize
   \BUPT@makeabstract
@@ -1202,6 +1218,11 @@
   \vfill
   \BUPT@authorization
   \vfill
+}
+% 生成献辞页
+\newcommand{\BUPT@makededication}{%
+  \cleardoublepage
+  \input{dedication}
 }
 %% 索引
 \long\def\@caption#1[#2]#3{%
