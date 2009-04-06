@@ -256,9 +256,9 @@
 \let\oldbibsecion\bibsection
 
 \ifBUPT@chapbib
-\renewcommand{\bibsection}{\oldbibsecion\addcontentsline{toc}{chapter}{\bibname}\wuhao[1.5]}
+\renewcommand{\bibsection}{\oldbibsecion\addcontentsline{toc}{chapter}{\bibname}\wuhao[1.2]}
 \else
-\renewcommand{\bibsection}{\oldbibsecion\addcontentsline{toc}{section}{\bibname}\wuhao[1.5]}
+\renewcommand{\bibsection}{\oldbibsecion\addcontentsline{toc}{section}{\bibname}\wuhao[1.5]\setlength{\bibsep}{6bp plus 0.5ex minus 0.2ex}}
 \fi
 
 %%% 书签支持
