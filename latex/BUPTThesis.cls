@@ -775,7 +775,7 @@
 \renewcommand\tableofcontents{%
   \BUPT@chapter*[]{\contentsname}
   \normalsize\@starttoc{toc}}
-\def\BUPT@toc@font{\bfseries}%sffamily
+\def\BUPT@toc@font{}%{\bfseries}%sffamily
 %\def\@pnumwidth{2em} % 这个参数没用了
 \def\@tocrmarg{2em}
 \def\@dotsep{1} % 目录点间的距离
@@ -1020,7 +1020,7 @@
   [\xiaosan\hei]%
   [\centering\sanhao\hei\BUPT@ctitle] % 目录不包含摘要
   {
-    \sihao[1.5]
+    \sihao[2]
     \par{
       \CJKindent
       \song\BUPT@cabstract
