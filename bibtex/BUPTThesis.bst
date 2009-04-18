@@ -129,7 +129,8 @@ ENTRY { address			% 地址
 %%%%%%%%%%%%%
 %% 字符串常量
 %%%%%%%%%%%%%
-FUNCTION {bbl.anonymous}   { language empty$ { "Anon" }  { "佚名" } if$ }
+% FUNCTION {bbl.anonymous}   { language empty$ { "Anon" }  { "佚名" } if$ }
+FUNCTION {bbl.anonymous} { "" }
 FUNCTION {bbl.etal}        { language empty$ { "et~al" } { "等" } if$ }
 FUNCTION {bbl.sine.loco}   { language empty$ { "S.~l." } { "出版地不详" } if$ }
 FUNCTION {bbl.sine.nomine} { language empty$ { "s.~n." } { "出版者不详" } if$ }
@@ -1709,43 +1710,43 @@ FUNCTION {format.address.publisher.year} {
   new.block
   type$ "inproceedings" =
     { pubaddress empty$
-	{ "[" bbl.sine.loco * "]" * bbl.colon * % 无出版地
+	{ "" % "[" bbl.sine.loco * "]" * bbl.colon * % 无出版地
 	  publisher empty$
 	    { "there's neither pubaddress nor publisher in " cite$ * warning$
-	      "[" * bbl.sine.nomine * "]" * % 无出版者
+	      "" * % "[" * bbl.sine.nomine * "]" * % 无出版者
 	    }
 	    { "there's a publisher but no pubaddress in " cite$ * warning$
 	      publisher *		% 有出版者
 	    }
 	  if$
 	}
-	{ pubaddress bbl.colon *	% 有出版地
-	  publisher empty$
+	{ publisher empty$
 	    { "there's a pubaddress but no publisher in " cite$ * warning$
-	      "[" * bbl.sine.nomine * "]" * % 无出版者
+	      "" % "[" * bbl.sine.nomine * "]" * % 无出版者
 	    }
-	    { publisher * }		% 有出版者
+	    { pubaddress bbl.colon *	% 有出版地
+	      publisher * }		% 有出版者
 	  if$
 	}
       if$
     }
     { address empty$
-	{ "[" bbl.sine.loco * "]" * bbl.colon * % 无出版地
+	{ "" % "[" bbl.sine.loco * "]" * bbl.colon * % 无出版地
 	  publisher empty$
 	    { "there's neither address nor publisher in " cite$ * warning$
-	      "[" * bbl.sine.nomine * "]" * % 无出版者
+	      "" * % "[" * bbl.sine.nomine * "]" * % 无出版者
 	    }
 	    { "there's a publisher but no address in " cite$ * warning$
 	      publisher *		% 有出版者
 	    }
 	  if$
 	}
-	{ address bbl.colon *	% 有出版地
-	  publisher empty$
+	{ publisher empty$
 	    { "there's a address but no publisher in " cite$ * warning$
-	      "[" * bbl.sine.nomine * "]" * % 无出版者
+	      "" % "[" * bbl.sine.nomine * "]" * % 无出版者
 	    }
-	    { publisher * }		% 有出版者
+	    { address bbl.colon *	% 有出版地
+	      publisher * }		% 有出版者
 	  if$
 	}
       if$
@@ -1755,7 +1756,15 @@ FUNCTION {format.address.publisher.year} {
   % 出版年
   year empty$
     { "there's no year in " cite$ * warning$ }
-    { bbl.comma * year *
+    { type$ "inproceedings" =
+	{ bbl.comma * year * }
+	{ publisher empty$ 
+	    { year * }
+	    { bbl.comma * year * }
+	  if$
+	}
+      if$
+	
       type$ "periodical" =
 	{ year2 empty$		% 对连续出版物可以排版 year2
 	    { skip$ }
@@ -1940,6 +1949,7 @@ FUNCTION {format.collection.editors} {
   if$
 }
 FUNCTION {format.address} {
+  new.block
   address empty$
     { "" }
     { address }
@@ -1949,13 +1959,12 @@ FUNCTION {format.address} {
 FUNCTION {format.month.year} {
   month empty$
     { "" }
-    { month
-      year empty$
-	{ "There is month but no year in " cite$ * warning$ }
-	{ " " * year * }
-      if$ 
-    }
+    { month " " * }
   if$
+  year empty$
+    { "There is month but no year in " cite$ * warning$ }
+    { year * }
+  if$ 
 }
 
 FUNCTION {format.collection.title} {
@@ -2248,7 +2257,9 @@ FUNCTION {misc}
   format.title output
   howpublished new.block.checka
   howpublished output
-  format.date output
+%  format.date output
+  format.address output
+  format.month.year output
   format.url output
   new.block
   note output
