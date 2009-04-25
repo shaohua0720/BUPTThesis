@@ -42,42 +42,59 @@
   \BUPT@mastertrue
   \BUPT@doctorfalse}
 
-%%% 保密等级选项 (*open*, control, confidential, classified, mostconfidential)
+%%% 保密等级选项 (*open*, control, confidential, classified, mostconfidential, 
+%%%             univ)
+% 国家秘密选项
 \newif\ifBUPT@secretlvl@open\BUPT@secretlvl@opentrue
 \newif\ifBUPT@secretlvl@control\BUPT@secretlvl@controlfalse
 \newif\ifBUPT@secretlvl@confidential\BUPT@secretlvl@confidentialfalse
 \newif\ifBUPT@secretlvl@classified\BUPT@secretlvl@classifiedfalse
 \newif\ifBUPT@secretlvl@mostconfidential\BUPT@secretlvl@mostconfidentialfalse
+% 非国家秘密选项
+\newif\ifBUPT@secretlvl@univ\BUPT@secretlvl@univtrue
+%
 \DeclareOption{open}{             % 公开级
   \BUPT@secretlvl@opentrue
   \BUPT@secretlvl@controlfalse
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedfalse
-  \BUPT@secretlvl@mostconfidentialfalse}
+  \BUPT@secretlvl@mostconfidentialfalse
+  \BUPT@secretlvl@univfalse}
 \DeclareOption{control}{          % 限制级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controltrue
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedfalse
-  \BUPT@secretlvl@mostconfidentialfalse}  
+  \BUPT@secretlvl@mostconfidentialfalse
+  \BUPT@secretlvl@univfalse}  
 \DeclareOption{confidential}{     % 秘密级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controlfalse
   \BUPT@secretlvl@confidentialtrue
   \BUPT@secretlvl@classifiedfalse
-  \BUPT@secretlvl@mostconfidentialfalse}
+  \BUPT@secretlvl@mostconfidentialfalse  
+  \BUPT@secretlvl@univfalse}
 \DeclareOption{classified}{       % 机密级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controlfalse
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedtrue
-  \BUPT@secretlvl@mostconfidentialfalse}
+  \BUPT@secretlvl@mostconfidentialfalse
+  \BUPT@secretlvl@univfalse}
 \DeclareOption{mostconfidential}{ % 绝密级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controlfalse
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedfalse
-  \BUPT@secretlvl@mostconfidentialtrue}
+  \BUPT@secretlvl@mostconfidentialtrue
+  \BUPT@secretlvl@univfalse}
+\DeclareOption{univ}{ % 学校秘密
+  \BUPT@secretlvl@openfalse
+  \BUPT@secretlvl@controlfalse
+  \BUPT@secretlvl@confidentialfalse
+  \BUPT@secretlvl@classifiedfalse
+  \BUPT@secretlvl@mostconfidentialfalse
+  \BUPT@secretlvl@univtrue}
 
 %%% 参考文献格式选项 (*sectbib*, chapbib)
 \newif\ifBUPT@sectbib\BUPT@sectbibtrue
@@ -91,15 +108,22 @@
   \BUPT@sectbibfalse
 }
 
-%%% 数学字体选项 (*mathptmx*, mathtime)
-\newif\ifBUPT@mathtime\BUPT@mathtimefalse
+%%% 数学字体选项 (*mathptmx*, mtpro, mtplus)
 \newif\ifBUPT@mathptmx\BUPT@mathptmxtrue
-\DeclareOption{mathtime}{       % 数学字体使用 MathTime
-  \BUPT@mathtimetrue
-  \BUPT@mathptmxfalse}
+\newif\ifBUPT@mtplus\BUPT@mtplusfalse
+\newif\ifBUPT@mtpro\BUPT@mtprofalse
 \DeclareOption{mathptmx}{       % 数学字体使用 mathptmx
-  \BUPT@mathtimefalse
-  \BUPT@mathptmxtrue}
+  \BUPT@mathptmxtrue
+  \BUPT@mtplusfalse
+  \BUPT@mtprofalse}
+\DeclareOption{mtplus}{         % 数学字体使用 MathTime-Plus
+  \BUPT@mathptmxfalse
+  \BUPT@mtplustrue
+  \BUPT@mtprofalse}
+\DeclareOption{mtpro}{          % 数学字体使用 MathTime Pro
+  \BUPT@mathptmxfalse
+  \BUPT@mtplusfalse
+  \BUPT@mtprotrue}
 
 %%% 题名页选项 (titlepage, *notitlepage*)
 \newif\ifBUPT@titlepage\BUPT@titlepagefalse
@@ -170,7 +194,16 @@
 \RequirePackage{amsmath}        % 使用 amsmath 数学宏包
 \RequirePackage{amssymb}        % 使用 amssymb 符号字体
 \newcommand{\bm}{\mathbf}       % 加粗符号使用 \mathbf
-\else                           % MathTime 选项
+%---------------------------------------------------------------
+\else\ifBUPT@mtplus             % MathTime Plus 选项
+\RequirePackage{amsmath}        % 使用 amsmath 数学宏包
+\RequirePackage{amssymb}        % 使用 amssymb 符号字体
+\RequirePackage[mtbold,subscriptcorrection,mtplusscr,T1]{mathtime}       
+                                % 加载 mathtime 宏包
+\newcommand\hmmax{0}            % default 3
+\RequirePackage{bm}             % 加载 bm 宏包
+%---------------------------------------------------------------
+\else                           % MathTime Pro 选项
 \RequirePackage{times}          % roman      字体使用 Times-Roman
                                 % typewriter 字体使用 Courier
 \RequirePackage[scaled=.92]{helvet} 
@@ -185,24 +218,8 @@
                                 % \mathscr  使用 Math Script 字体
                                 % \mathfrak 使用 Math Fraktur 字体
                                 % \mathcal  使用 Math Calligraphic 字体
-%\newcommand\hmmax{0}
 \RequirePackage{bm}             % 加粗符号使用 \boldsymbol
-% \DeclareSymbolFont{digits}{\encodingdefault}{ptm}{m}{n}
-% \SetSymbolFont{digits}{bold}{\encodingdefault}{ptm}{b}{n}
-% \DeclareMathSymbol{0}{\mathalpha}{digits}{"30}
-% \DeclareMathSymbol{1}{\mathalpha}{digits}{"31}
-% \DeclareMathSymbol{2}{\mathalpha}{digits}{"32}
-% \DeclareMathSymbol{3}{\mathalpha}{digits}{"33}
-% \DeclareMathSymbol{4}{\mathalpha}{digits}{"34}
-% \DeclareMathSymbol{5}{\mathalpha}{digits}{"35}
-% \DeclareMathSymbol{6}{\mathalpha}{digits}{"36}
-% \DeclareMathSymbol{7}{\mathalpha}{digits}{"37}
-% \DeclareMathSymbol{8}{\mathalpha}{digits}{"38}
-% \DeclareMathSymbol{9}{\mathalpha}{digits}{"39}
-% \DeclareMathDelimiter{\lbrace}{\mathopen}{digits}{"7B}{largesymbols}{"08}
-% \DeclareMathDelimiter{\rbrace}{\mathclose}{digits}{"7D}{largesymbols}{"09}
-\SetMathAlphabet{\mathnormal}{normal}{\encodingdefault}{ptm}{m}{it}
-\fi
+\fi\fi
 \RequirePackage[low-sup]{subdepth}       
                                 % 使用 Subdepth 宏包, 调整上下标位置
 
@@ -883,7 +900,7 @@
 % \begin{center}
   \vspace*{-1.3cm}
   % 密级与保密期限
-  \parbox[b]{\textwidth}{%
+  \begin{minipage}[t]{\textwidth}
     \sihao
     \BUPT@secretlvl@caption\BUPT@title@sep\BUPT@secretlvl@value
     \ifBUPT@secretlvl@open
@@ -891,62 +908,62 @@
     \else
       \qquad\BUPT@secretperiod@caption\BUPT@title@sep\BUPT@secretperiod
     \fi
-  }
-  \parbox[t]{\textwidth}{%
-    \begin{center}
-      % 手写体校名
-      \includegraphics[width=12cm]{buptname}\par
-      \covertitlesize[1.0]{\hei\BUPT@covertitle}\par
-      \vspace*{10.5bp}
-      % 校徽
-      \includegraphics[width=3.5cm]{buptlogo}
-    \end{center}
-  }
-  \vspace*{26bp}
+  \end{minipage}\\[2cm]
+%  \vspace{2cm}
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    % 手写体校名
+    \includegraphics[width=12cm]{buptname}\par
+    \vspace{0.4cm}
+    \covertitlesize[1.0]{\hei\BUPT@covertitle}\par
+    \vspace{1cm}
+    % 校徽
+    \includegraphics[width=3.5cm]{buptlogo}
+  \end{minipage}\\[\stretch{1}]
   % 论文题目
-  \parbox[t]{\textwidth}{
-    \renewcommand{\baselinestretch}{1.5}
-    \xiaoer[1]\song
-    \begin{center}
-      \begin{tabular}{@{}l@{}c@{}p{86mm}@{}}
-        \BUPT@ctitlelabel & \BUPT@title@sep & {%
-          \begin{minipage}[t]{86mm}
-            \centering\BUPT@ctitle
-          \end{minipage}
-        }
-      \end{tabular}
-    \end{center}
-  }
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    \xiaoer[1.5]
+    \setlength{\extrarowheight}{0pt}
+    \setlength{\arrayrulewidth}{0.5bp}
+    \begin{tabular}{@{}p{18mm}@{}p{105mm}@{}}
+      \BUPT@ctitlelabel\BUPT@title@sep & {%
+        \begin{minipage}[t]{105mm}
+          \centering\BUPT@ctitle
+        \end{minipage}
+      }\\
+      \cline{2-2}
+    \end{tabular}
+  \end{minipage}\\[1cm]
   % 作者信息
-  \parbox{\textwidth}{%
-    {\sihao[1.24]
-      \begin{center}
-        \setlength{\extrarowheight}{0pt}
-        \setlength{\arrayrulewidth}{0.45mm}
-        \begin{tabular}{@{}p{1.96cm}@{}c@{}l@{}p{4.2cm}}
-          \BUPT@studentnumlabel & \BUPT@title@sep 
-          & {\hfill\BUPT@studentnum\hfill} \\ % 学号
-          [-3pt] \cline{3-3} \\
-          \BUPT@cauthorlabel & \BUPT@title@sep 
-          & {\hfill\BUPT@cauthor\hfill} \\ % 作者
-          [-3pt] \cline{3-3} \\
-          \BUPT@cmajorlabel & \BUPT@title@sep 
-          & {\hfill\BUPT@cmajor\hfill} \\ % 专业
-          [-3pt] \cline{3-3} \\
-          \BUPT@csupervisorlabel & \BUPT@title@sep 
-          & {\hfill\BUPT@csupervisor\hfill} \\ % 导师
-          [-3pt] \cline{3-3} \\
-          \BUPT@cdepartmentlabel & \BUPT@title@sep 
-          & {\hfill\BUPT@cdepartment\hfill} \\ % 学院
-          [-2pt] \cline{3-3} \\
-        \end{tabular}
-      \end{center}
-    }
-  }
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    \sihao[1.24]
+    \setlength{\extrarowheight}{0pt}
+    \setlength{\arrayrulewidth}{0.5bp}
+    \begin{tabular}{@{}p{1.96cm}@{}c@{}l@{}p{4.2cm}}
+      \BUPT@studentnumlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@studentnum\hfill} \\ % 学号
+      [-3pt] \cline{3-3} \\
+      \BUPT@cauthorlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@cauthor\hfill} \\ % 作者
+      [-3pt] \cline{3-3} \\
+      \BUPT@cmajorlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@cmajor\hfill} \\ % 专业
+      [-3pt] \cline{3-3} \\
+      \BUPT@csupervisorlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@csupervisor\hfill} \\ % 导师
+      [-3pt] \cline{3-3} \\
+      \BUPT@cdepartmentlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@cdepartment\hfill} \\ % 学院
+      [-2pt] \cline{3-3} \\
+    \end{tabular}
+  \end{minipage}\\[1.5cm]
   % 中文日期
-  \begin{center}
+  \begin{minipage}[t]{\textwidth}
+    \centering
     {\sihao[1.0] \song \BUPT@cdate}
-  \end{center}
+  \end{minipage}
 } % end of titlepage
 
 \newcommand{\BUPT@doctor@engcover}{%
