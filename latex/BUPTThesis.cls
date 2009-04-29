@@ -259,7 +259,6 @@
 \RequirePackage{everysel}
 
 %%% 参考文献
-\RequirePackage{url}
 \RequirePackage{bibentry}
 \ifBUPT@chapbib
 \RequirePackage[square,super,numbers,sort&compress]{natbib}
@@ -1085,7 +1084,7 @@
       \setlength{\labelwidth}{#1}  % 标签盒子宽度
       \setlength{\labelsep}{0.5cm} % 标签与列表文本距离
       \setlength{\itemindent}{0cm} % 标签缩进量
-      \setlength{\leftmargin}{\labelwidth+\labelsep} %×ó±ß½ç
+      \setlength{\leftmargin}{\labelwidth+\labelsep+24bp} %
       \setlength{\rightmargin}{0cm}
       \setlength{\parsep}{0cm} % 段落间距
       \setlength{\itemsep}{0cm} % 
@@ -1132,8 +1131,12 @@
 \renewenvironment{appendix}{%
   \BUPT@appendix
   \gdef\@chapapp{\appendixname~\thechapter}
-  %\renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter-\fi\@arabic\c@equation}
 }{}
+\newenvironment{appendix*}{%
+  \BUPT@appendix
+  \gdef\@chapapp{\appendixname}%
+}{} 
+% \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter-\fi\@arabic\c@equation}
 
 %% 缩略词表
 \newenvironment{listofacronyms}[1][2.5cm]{
