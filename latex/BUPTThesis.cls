@@ -161,8 +161,20 @@
   \BUPT@dedicationtrue
 }
 
-%%% 设置默认类选项 (博士学位, 公开级, 参考文献列于各章末尾, 无题名页, 打印版本)
-\ExecuteOptions{doctor,open,sectbib,mathptmx,notitlepage,print}
+%%% 后台驱动 (*dvips*, dvipdf)
+\newif\ifBUPT@dvips\BUPT@dvipstrue
+\newif\ifBUPT@dvipdf\BUPT@dvipdffalse
+\DeclareOption{dvips}{%
+  \BUPT@dvipstrue
+  \BUPT@dvipdffalse
+}
+\DeclareOption{dvipdf}{%
+  \BUPT@dvipsfalse
+  \BUPT@dvipdftrue
+}
+
+%%% 设置默认类选项 (博士学位, 公开级, 参考文献列于各章末尾, 无题名页, 打印版本, dvips)
+\ExecuteOptions{doctor,open,sectbib,mathptmx,notitlepage,print,dvips}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 传递选项给 book 文档类
@@ -227,7 +239,11 @@
 \RequirePackage{cases}           % 使用 cases 宏包以支持子公式编号的条件公式
 
 %%% 图形支持
+\ifBUPT@dvips                    % 如果使用 dvips 作为后台驱动
 \RequirePackage[dvips]{graphicx} % 使用 dvips 驱动的 graphicx 宏包
+\else                            % 否则使用 dvipdf 作为后台驱动
+\RequirePackage[dvipdf]{graphicx}
+\fi
 \RequirePackage{subfigure}       % 使用 subfigure 宏包处理子图
 
 %%% 首行缩进
@@ -278,13 +294,42 @@
 \fi
 
 %%% 书签支持
+% 根据驱动类型加载 xcolor 宏包
+\ifBUPT@dvips
 \RequirePackage[usenames,dvipsnames,dvips,cmyk]{xcolor}
-\ifBUPT@online
-\RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=Blue,citecolor=Blue,citebordercolor=white,urlcolor=Mahogany]{hyperref}
 \else
-\RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=black,citecolor=black,citebordercolor=white,urlcolor=black]{hyperref}
-%\def\pdfBorderAttrs{/Border [0 0 0] } % No border arround Links 
+\RequirePackage[usenames,dvipsnames,dvipdfm,cmyk]{xcolor}
 \fi
+% 加载 hyperref 宏包
+\RequirePackage[unicode,a4paper,bookmarksopen=true,colorlinks=true]{hyperref}
+% 根据驱动类型设置 hyperref 的驱动类型
+\ifBUPT@dvips
+\hypersetup{dvips}
+\else
+\hypersetup{dvipdfm}
+\fi
+% 根据是否是打印版本设置 hyperref 超链接的颜色
+\ifBUPT@online
+\hypersetup{%
+  linkcolor=Blue,%
+  citecolor=Blue,%
+  citebordercolor=white,%
+  urlcolor=Mahogany%
+}
+\else
+\hypersetup{%
+  linkcolor=black,
+  citecolor=black,
+  citebordercolor=white,
+  urlcolor=black%
+}
+\fi
+% \ifBUPT@online
+% \RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=Blue,citecolor=Blue,citebordercolor=white,urlcolor=Mahogany]{hyperref}
+% \else
+% \RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=black,citecolor=black,citebordercolor=white,urlcolor=black]{hyperref}
+% %\def\pdfBorderAttrs{/Border [0 0 0] } % No border arround Links 
+% \fi
 
 %%% 使用 breakurl 支持对长链接的自动换行
 \RequirePackage{breakurl}
