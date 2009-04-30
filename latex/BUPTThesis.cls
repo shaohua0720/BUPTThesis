@@ -294,19 +294,12 @@
 \fi
 
 %%% 书签支持
-% 根据驱动类型加载 xcolor 宏包
-\ifBUPT@dvips
 \RequirePackage[usenames,dvipsnames,dvips,cmyk]{xcolor}
-\else
-\RequirePackage[usenames,dvipsnames,dvipdfm,cmyk]{xcolor}
-\fi
 % 加载 hyperref 宏包
-\RequirePackage[unicode,a4paper,bookmarksopen=true,colorlinks=true]{hyperref}
-% 根据驱动类型设置 hyperref 的驱动类型
 \ifBUPT@dvips
-\hypersetup{dvips}
+\RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true]{hyperref}
 \else
-\hypersetup{dvipdfm}
+\RequirePackage[unicode,a4paper,dvipdfm,bookmarksopen=true,colorlinks=true]{hyperref}
 \fi
 % 根据是否是打印版本设置 hyperref 超链接的颜色
 \ifBUPT@online
@@ -324,12 +317,6 @@
   urlcolor=black%
 }
 \fi
-% \ifBUPT@online
-% \RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=Blue,citecolor=Blue,citebordercolor=white,urlcolor=Mahogany]{hyperref}
-% \else
-% \RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true,linkcolor=black,citecolor=black,citebordercolor=white,urlcolor=black]{hyperref}
-% %\def\pdfBorderAttrs{/Border [0 0 0] } % No border arround Links 
-% \fi
 
 %%% 使用 breakurl 支持对长链接的自动换行
 \RequirePackage{breakurl}
