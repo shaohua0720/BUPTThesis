@@ -137,16 +137,24 @@
   \BUPT@notitlepagetrue
 }
 
-%%% 输出版本 (*print*, online)
+%%% 输出版本 (*print*, online, peerreview)
 \newif\ifBUPT@print\BUPT@printtrue
 \newif\ifBUPT@online\BUPT@onlinefalse
+\newif\ifBUPT@peerreview\BUPT@peerreviewfalse
 \DeclareOption{print}{          % 打印版本
   \BUPT@printtrue
   \BUPT@onlinefalse
+  \BUPT@peerreviewfalse
 }
 \DeclareOption{online}{         % 在线版本
   \BUPT@printfalse
   \BUPT@onlinetrue
+  \BUPT@peerreviewfalse
+}
+\DeclareOption{peerreview}{     % 盲审版本
+  \BUPT@printfalse
+  \BUPT@onlinefalse
+  \BUPT@peerreviewtrue
 }
 
 %%% 献辞页 (*nodedication*, dedication)
@@ -302,14 +310,14 @@
 \RequirePackage[unicode,a4paper,dvipdfm,bookmarksopen=true,colorlinks=true]{hyperref}
 \fi
 % 根据是否是打印版本设置 hyperref 超链接的颜色
-\ifBUPT@online
+\ifBUPT@online                  % 对于 online 版本超链接用彩色
 \hypersetup{%
   linkcolor=Blue,%
   citecolor=Blue,%
   citebordercolor=white,%
   urlcolor=Mahogany%
 }
-\else
+\else                           % 对于 print 或 peerreview 版本超链接用黑色
 \hypersetup{%
   linkcolor=black,
   citecolor=black,
@@ -320,6 +328,11 @@
 
 %%% 使用 breakurl 支持对长链接的自动换行
 \RequirePackage{breakurl}
+
+%%% 如果是 online 版本加载 wallpaper 宏包
+\ifBUPT@online
+\RequirePackage{wallpaper}
+\fi
 
 %%% 自动产生缩略语表
 \RequirePackage[toc,section=chapter]{glossaries}
@@ -923,11 +936,138 @@
 \BUPT@define@term{cdepartmentlabel}
 \BUPT@define@term{ctitlelabel}
 \BUPT@define@term{secretperiod}
-
+\BUPT@define@term{hiddentext}
 \def\BUPT@preschapter{}
 \def\BUPT@schapterformat{}
+%
+\newcommand{\BUPT@hide@text}[1]{%
+  \ifBUPT@peerreview
+  \BUPT@hiddentext
+  \else
+  {#1}
+  \fi%
+}
+%% 封面彩云纸背景
+\newcommand{\BUPT@cover@texture}{%
+  \setlength{\wpYoffset}{-1in}       % 调整垂直方向偏移
+  \ThisTileWallPaper{1.6in}{2.3in}   % 尺寸 1.633 x 2.333 in
+    {bupttexture}                    % 彩云纸背景图片 bupttexture.eps
+}
+%% 封面(封一)
+\newcommand{\BUPT@front@cover}{%
+  % 如果是 online 模式增加彩云纸封面
+  \ifBUPT@online         
+  \setlength{\wpYoffset}{-1in}       % 调整垂直方向偏移
+  \BUPT@cover@texture
+  \fi
+  % 密级与保密期限
+  \vspace*{-1.3cm}
+  \begin{minipage}[t]{\textwidth}
+    \sihao
+    \BUPT@secretlvl@caption\BUPT@title@sep\BUPT@secretlvl@value
+    \ifBUPT@secretlvl@open
+    \relax
+    \else
+    \qquad\BUPT@secretperiod@caption\BUPT@title@sep\BUPT@secretperiod
+    \fi
+  \end{minipage}\\[2cm]
+  % 校名与校徽
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    % 手写体校名
+    \includegraphics[width=12cm]{buptname}\par
+    \vspace{0.4cm}
+    \covertitlesize[1.0]{\hei\BUPT@covertitle}\par
+    \vspace{1cm}
+    % 校徽
+    \includegraphics[width=3.5cm]{buptlogo}
+  \end{minipage}\\[\stretch{1}]
+  % 论文题目
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    \xiaoer[1.5]
+    \setlength{\extrarowheight}{0pt}
+    \setlength{\arrayrulewidth}{0.5bp}
+    \begin{tabular}{@{}p{18mm}@{}p{105mm}@{}}
+      \BUPT@ctitlelabel\BUPT@title@sep & {%
+        \begin{minipage}[t]{105mm}
+          \centering\BUPT@ctitle
+        \end{minipage}
+      }\\
+      \cline{2-2}
+    \end{tabular}
+  \end{minipage}\\[1cm]
+  % 作者信息
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    \sihao[1.24]
+    \setlength{\extrarowheight}{0pt}
+    \setlength{\arrayrulewidth}{0.5bp}
+    \begin{tabular}{@{}p{1.96cm}@{}c@{}l@{}p{4.2cm}}
+      \BUPT@studentnumlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@hide@text{\BUPT@studentnum}\hfill} \\ % 学号
+      [-3pt] \cline{3-3} \\
+      \BUPT@cauthorlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@hide@text{\BUPT@cauthor}\hfill} \\ % 作者
+      [-3pt] \cline{3-3} \\
+      \BUPT@cmajorlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@cmajor\hfill} \\ % 专业
+      [-3pt] \cline{3-3} \\
+      \BUPT@csupervisorlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@hide@text{\BUPT@csupervisor}\hfill} \\ % 导师
+      [-3pt] \cline{3-3} \\
+      \BUPT@cdepartmentlabel & \BUPT@title@sep 
+      & {\hfill\BUPT@cdepartment\hfill} \\ % 学院
+      [-2pt] \cline{3-3} \\
+    \end{tabular}
+  \end{minipage}\\[1.5cm]
+  % 日期
+  \begin{minipage}[t]{\textwidth}
+    \centering
+    {\sihao[1.0] \song \BUPT@cdate}
+  \end{minipage}
+} % 封面(封一)
+
+%% 前封里(封二)
+\newcommand{\BUPT@inside@front@cover}{%
+  \ifBUPT@online
+  \clearpage
+  \BUPT@cover@texture
+  \clearpage
+  \else
+  \cleardoublepage
+  \fi
+}
+%% 底封里(封三)
+\newcommand{\BUPT@inside@back@cover}{%
+  \cleardoublepage
+  \ifBUPT@online%
+  \thispagestyle{BUPT@empty}
+  \BUPT@cover@texture\ 
+  \else
+  \relax
+  \fi%
+}
+%% 封底(封四)
+\newcommand{\BUPT@back@cover}{%
+  \ifBUPT@online%
+  \clearpage
+  \thispagestyle{BUPT@empty}
+  \BUPT@cover@texture\ 
+  \clearpage
+  \else
+  \relax
+  \fi
+}
 %% 封面
 \newcommand{\BUPT@first@titlepage}{
+%   \ifBUPT@online
+%   % 如果是 online 模式, 增加封面彩云纸背景 1.633 x 2.333 in
+%   % \setlength{\wpXoffset}{+0.85in}
+%   \setlength{\wpYoffset}{-1in}
+%   \ThisTileWallPaper{1.6in}{2.3in}{texture}
+%   \fi
+  \BUPT@cover@background
 % \begin{center}
   \vspace*{-1.3cm}
   % 密级与保密期限
@@ -995,6 +1135,9 @@
     \centering
     {\sihao[1.0] \song \BUPT@cdate}
   \end{minipage}
+  \clearpage
+  \BUPT@cover@background
+  \clearpage
 } % end of titlepage
 
 \newcommand{\BUPT@doctor@engcover}{%
@@ -1039,14 +1182,15 @@
 \newcommand\BUPT@underline[2][6em]{%
   \hskip1pt\underline{\hb@xt@ #1{\hss#2\hss}}\hskip3pt%
 }
-%% 封面
+%% 生成封面 (包括封面、封面里、创新性声明与授权说明页、献辞页、中英文摘要)
 \newcommand{\makecover}{
   \phantomsection
   \pdfbookmark[-1]{\BUPT@ctitle}{ctitle}
   \normalsize%
   \begin{titlepage}
-    \BUPT@first@titlepage
-    \cleardoublepage
+%    \BUPT@first@titlepage
+    \BUPT@front@cover           % 封面
+    \BUPT@inside@front@cover    % 封面里
 %    \BUPT@doctor@engcover
     \BUPT@makedeclauth          % 创新性声明与授权说明页
   \end{titlepage}
@@ -1342,13 +1486,24 @@
     \enc@update
   }
 }
-
+% \def\BUPT@back@cover{           % 封三、封四
+%   \ifBUPT@online%
+%   \thispagestyle{BUPT@empty}
+%   \BUPT@cover@background\ 
+%   \clearpage\thispagestyle{BUPT@empty}
+%   \BUPT@cover@background\ 
+%   \clearpage 
+%   \else
+%   \relax
+%   \fi%
+% }
 %% 启用CJK
 \def\BUPT@beginCJK{%
   \BUPT@fixselectfont%
   \begin{CJK*}{UTF8}{song}%
     \sloppy\CJKindent\CJKtilde}
-  \def\BUPT@endCJK{\clearpage\end{CJK*}}
+
+\def\BUPT@endCJK{\BUPT@inside@back@cover\BUPT@back@cover\end{CJK*}}
 
 \let\BUPT@begindocumenthook\@begindocumenthook
 \let\BUPT@enddocumenthook\@enddocumenthook
@@ -1357,9 +1512,3 @@
 \def\@begindocumenthook{\BUPT@begindocumenthook\BUPT@beginCJK}
 \def\@enddocumenthook{\BUPT@endCJK\BUPT@enddocumenthook}
 \AtBeginDocument{\BUPT@item@space}
-
-\newcommand{\upd}{\mathrm{d}}
-\newcommand{\upj}{\mathrm{j}}
-\newcommand{\upe}{\mathrm{e}}
-\newcommand{\T}{\mathrm{T}}
-\newcommand{\CT}{\mathrm{H}}
