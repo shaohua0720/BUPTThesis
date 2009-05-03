@@ -21,6 +21,8 @@ FUNCTION {default.name.format.string} {"{vv~}{ll}{~f}{, Jj}"}
 % 列出的最多作者数目, 即当作者数目超过下列数字时, 超出部分的作者姓名将略去
 FUNCTION {default.max.num.names.before.forced.et.al} { #3 }
 
+% 是否为盲审版本, #0 表示盲审将隐去作者信息, #1 表示非盲审
+FUNCTION {default.is.for.peer.review} { #0 }
 %%%%%%%%%%%%%%
 % 一些辅助函数
 %%%%%%%%%%%%%%
@@ -122,6 +124,8 @@ ENTRY { address			% 地址
 	pubaddress		% 出版地
 	CTLname_format_string	% 作者英文姓名排版格式
 	CTLmax_names_forced_etal % 强制略去的最大作者数
+	CTLauthor_name_english	 % 作者英文姓名
+	CTLauthor_name_chinese	 % 作者中文姓名
   }
   {}
   { label }
@@ -145,6 +149,9 @@ FUNCTION {bbl.nd}          { "nd" }	% 序数词后缀
 FUNCTION {bbl.rd}          { "rd" }	% 序数词后缀
 FUNCTION {bbl.th}          { "th" }	% 序数词后缀
 
+FUNCTION {bbl.number}      { "第" }
+FUNCTION {bbl.author}      { "作者" }
+
 %%%%%%%%%%%%
 %% 整型变量
 %%%%%%%%%%%
@@ -152,6 +159,7 @@ INTEGERS { output.state before.all mid.sentence after.title after.sentence url.s
 INTEGERS { number.label longest.label.width multiresult 
 	   nameptr namesleft numnames lastnamecapitalized namelength charptr }
 INTEGERS { max.num.names.before.forced.et.al }
+INTEGERS { is.for.peer.review }
 
 %%%%%%%%%%%%%
 %% 字符串变量
@@ -163,6 +171,8 @@ STRINGS { s
 	  name.emph.author.en	% 强调现实的作者英文姓名
 	  name.emph.author.zh	% 强调显示的作者中文姓名
 	  name.format.string	% 姓名的格式字符串
+	  author.name.in.english % 作者英文姓名
+	  author.name.in.chinese % 作者中文姓名
 }
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -199,6 +209,7 @@ FUNCTION {end.bib} {
 FUNCTION {initialize.controls} {
   default.name.format.string 'name.format.string :=
   default.max.num.names.before.forced.et.al 'max.num.names.before.forced.et.al :=
+  default.is.for.peer.review 'is.for.peer.review :=
 }
 
 % 初始化最长 label
@@ -808,9 +819,38 @@ FUNCTION {capitalize.last.name} {
 %   }
 %   while$
 % }
-
-% 格式化姓名
-FUNCTION {format.names} { 
+% 格式化盲审姓名
+FUNCTION {format.names.for.peer.review} {
+  's :=				% s := author域
+  #1 'nameptr :=		% nameptr 是姓名指针，初始化为 1
+  s num.names$ 'numnames :=     % 利用 num.names$ 获得 s 中的作者数量存入 nameptr
+  numnames 'namesleft :=	% 未处理的姓名数 namesleft := numnames
+  % 循环处理所有姓名
+  { namesleft #0 > }		% if namesleft > #0 (还有姓名没有格式化)
+  { s nameptr 			% 选择第 nameptr 个姓名
+    name.format.string		% 按 name.format.string 的格式排版
+    format.name$		% 调用 format.name$
+    remove.period		% 并删除缩写符号'.'
+    't :=			% 格式化后的姓名暂存于 t
+    language empty$		
+      { author.name.in.english }% 如果是英文文献将 author.name.in.english 压栈
+      { author.name.in.chinese } % 否则将 author.name.in.chinese 压栈
+    if$
+    t =				% 用当前的姓名与栈上的姓名做比较
+      { nameptr int.to.str$	% 将作者序号转化为字符串
+	"\CJKnumber{" swap$ * "}" * % 使用中文数字
+	bbl.number swap$ * bbl.author * % 加上``第''和``作者''
+%	duplicate$ debug.output
+      }
+      { skip$ }
+    if$
+    nameptr #1 + 'nameptr :=	% 姓名指针加 1
+    namesleft #1 - 'namesleft := % 剩余姓名数减 1
+  }
+  while$
+}
+% 格式化非盲审姓名
+FUNCTION {format.names.for.non.peer.review} { 
   % 初始化
   's :=				% s := author域
   #1 'nameptr :=		% nameptr 是姓名指针，初始化为 1
@@ -850,7 +890,13 @@ FUNCTION {format.names} {
   }
   while$
 }
-
+% 格式化姓名
+FUNCTION {format.names} {
+  is.for.peer.review 
+    { format.names.for.peer.review }	 % 格式化盲审姓名
+    { format.names.for.non.peer.review } % 格式化非盲审姓名
+  if$
+}
 FUNCTION {format.authors}
 { author empty$
     { bbl.anonymous
@@ -2290,7 +2336,7 @@ FUNCTION {unpublished}
 }
 
 % 专用控制条目 BUPTThesisBSTCTL 用于提供方便的用户设置接口
-FUNCTION {BUPTThesisBSTCTL}{ 
+FUNCTION {BUPTThesisBSTCTL}{
   is.print.banners.to.terminal
     { "** BUPTThesis BST control entry " quote$ * cite$ * 
       quote$ * " detected." *
@@ -2322,12 +2368,33 @@ FUNCTION {BUPTThesisBSTCTL}{
 %       'is.forced.et.al :=
 %     }
 %   if$
+  % 显示作者数目
   CTLmax_names_forced_etal
   empty$
     { skip$ }
     { CTLmax_names_forced_etal
       string.to.integer
       'max.num.names.before.forced.et.al :=
+    }
+  if$
+  % 论文作者英文姓名
+  CTLauthor_name_english
+  empty$
+    { skip$ }
+    { CTLauthor_name_english 
+      'author.name.in.english := 
+      #1 'is.for.peer.review := 
+%      "CTLauthor_name_english=" author.name.in.english * debug.output
+    }
+  if$
+  % 论文作者中文姓名
+  CTLauthor_name_chinese
+  empty$
+    { skip$ }
+    { CTLauthor_name_chinese
+      'author.name.in.chinese := 
+      #1 'is.for.peer.review :=
+%      "CTLauthor_name_chinese=" author.name.in.chinese * debug.output
     }
   if$
 %   CTLnames_show_etal
