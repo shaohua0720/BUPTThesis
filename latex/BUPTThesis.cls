@@ -1212,12 +1212,12 @@
   [\xiaosan\hei]%
   [\centering\sanhao\hei\BUPT@ctitle] % 目录不包含摘要
   {
-    \sihao[2]
+    \sihao[1.6]
     \par{
       \CJKindent
       \song\BUPT@cabstract
     }\par
-    \vspace*{12bp}
+    \vspace{12bp}
     \setbox0=\hbox{{\hei \BUPT@ckeywords@title}}
     \noindent\hangindent\wd0\hangafter1\box0\BUPT@ckeywords
   }
