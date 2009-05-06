@@ -126,6 +126,7 @@ ENTRY { address			% 地址
 	CTLmax_names_forced_etal % 强制略去的最大作者数
 	CTLauthor_name_english	 % 作者英文姓名
 	CTLauthor_name_chinese	 % 作者中文姓名
+	CTLfor_peer_review	 % 是否匿名
   }
   {}
   { label }
@@ -300,6 +301,22 @@ FUNCTION {string.to.integer} {
   while$
   pop$				        % 释放栈顶元素
   numnames				% numnames 压栈返回
+}
+
+% convert the strings "yes" or "no" to #1 or #0 respectively
+FUNCTION {yes.no.to.int}
+{ "l" change.case$ duplicate$
+    "yes" =
+    { pop$  #1 }
+    { duplicate$ "no" =
+        { pop$ #0 }
+        { "unknown boolean " quote$ * swap$ * quote$ *
+          " in " * cite$ * warning$
+          #0
+        }
+      if$
+    }
+  if$
 }
 
 % 初始化状态常量
@@ -2383,7 +2400,7 @@ FUNCTION {BUPTThesisBSTCTL}{
     { skip$ }
     { CTLauthor_name_english 
       'author.name.in.english := 
-      #1 'is.for.peer.review := 
+      % #1 'is.for.peer.review := 
 %      "CTLauthor_name_english=" author.name.in.english * debug.output
     }
   if$
@@ -2393,8 +2410,16 @@ FUNCTION {BUPTThesisBSTCTL}{
     { skip$ }
     { CTLauthor_name_chinese
       'author.name.in.chinese := 
-      #1 'is.for.peer.review :=
+      % #1 'is.for.peer.review :=
 %      "CTLauthor_name_chinese=" author.name.in.chinese * debug.output
+    }
+  if$
+  CTLfor_peer_review
+  empty$
+    { skip$ }
+    { CTLfor_peer_review
+      yes.no.to.int
+      'is.for.peer.review :=
     }
   if$
 %   CTLnames_show_etal
