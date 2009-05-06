@@ -1244,6 +1244,7 @@
   \cleardoublepage       % 从奇数页开始
   % [<tocline>]{<title>}[<titlesize>][<prefix>]
   \BUPT@chapter*[\BUPT@tableofpublications@name]{\BUPT@tableofpublications@name} % 学术论文目录标题
+  \nocite{BSTnoetal}
   \ifBUPT@peerreview
   \nocite{BSTcontrol}
   \fi
