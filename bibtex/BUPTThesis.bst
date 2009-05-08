@@ -2034,7 +2034,7 @@ FUNCTION {format.collection.title} {
   booktitle empty$
     { "" }
     { new.block 
-      booktitle 
+      "In " booktitle *
 %       address empty$
 % 	{ skip$ }
 % 	{ bbl.comma * address * bbl.comma * 
