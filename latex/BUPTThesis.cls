@@ -336,7 +336,7 @@
 
 %%% 自动产生缩略语表
 \RequirePackage[toc,section=chapter]{glossaries}
-\setlength{\glsdescwidth}{0.8\linewidth} % 缩略语描述列宽
+\setlength{\glsdescwidth}{0.9\linewidth} % 缩略语描述列宽
 \newglossarystyle{BUPT@Acronyms@style}{  % 设置自定义缩略语表格式
   \glossarystyle{long}                   % 以 long 样式为基础
   \renewcommand*{\glossaryentryfield}[5]{% 
@@ -465,15 +465,15 @@
 \setlength{\headheight}{20pt}         % 页眉高度: 20pt
 \setlength{\topskip}{0pt}             % 
 \setlength{\skip\footins}{15pt}       %
-\setlength{\topmargin}{30mm}          % 上边距: 30mm
+\setlength{\topmargin}{25mm}          % 上边距: 25 mm (原为30mm)
 \setlength{\footskip}{15mm}           %
 \setlength{\headsep}{5mm}             %
-\addtolength{\textheight}{-79mm}      % 文字高度:  297mm (纸张高度)
-                                      %          - 30mm (上边距) 
+\addtolength{\textheight}{-77mm}      % 文字高度:  297mm (纸张高度)
+                                      %          - 25mm (上边距) 
                                       %          -  7mm (\headerheight, 20pt) 
                                       %          -  5mm (\headsep)
                                       %          - 15mm (\footskip)
-                                      %          - 22mm (下边距)
+                                      %          - 25mm (下边距)
 %% 页眉页脚
 \let\BUPT@cleardoublepage\cleardoublepage
 \newcommand{\BUPT@clearemptydoublepage}{%
