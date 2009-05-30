@@ -948,10 +948,15 @@
   \fi%
 }
 %% 封面彩云纸背景
-\newcommand{\BUPT@cover@texture}{%
-  \setlength{\wpYoffset}{-1in}       % 调整垂直方向偏移
-  \ThisTileWallPaper{1.6in}{2.3in}   % 尺寸 1.633 x 2.333 in
-    {bupttexture}                    % 彩云纸背景图片 bupttexture.eps
+\newcommand{\BUPT@cover@texture}{ %
+  \setlength{\wpYoffset}{-1in}    % 调整垂直方向偏移
+  \ifBUPT@doctor                  % 如果是博士学位论文
+  \ThisTileWallPaper{1.6in}{2.3in}% 尺寸 1.633 x 2.333 in
+  {bupttexturec}                  % 浅蓝色彩云纸背景图片 bupttexturec.eps
+  \else                           % 如果是说是学位论文
+  \ThisTileWallPaper{1.6in}{2.3in}% 尺寸 1.633 x 2.333 in
+  {bupttexturey}                  % 浅黄色彩云纸背景图片 bupttexturey.eps
+  \fi
 }
 %% 封面(封一)
 \newcommand{\BUPT@front@cover}{%
