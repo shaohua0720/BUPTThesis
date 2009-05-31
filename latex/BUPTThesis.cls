@@ -43,7 +43,7 @@
   \BUPT@doctorfalse}
 
 %%% 保密等级选项 (*open*, control, confidential, classified, mostconfidential, 
-%%%             univ)
+%%%             univ, biz)
 % 国家秘密选项
 \newif\ifBUPT@secretlvl@open\BUPT@secretlvl@opentrue
 \newif\ifBUPT@secretlvl@control\BUPT@secretlvl@controlfalse
@@ -51,7 +51,8 @@
 \newif\ifBUPT@secretlvl@classified\BUPT@secretlvl@classifiedfalse
 \newif\ifBUPT@secretlvl@mostconfidential\BUPT@secretlvl@mostconfidentialfalse
 % 非国家秘密选项
-\newif\ifBUPT@secretlvl@univ\BUPT@secretlvl@univtrue
+\newif\ifBUPT@secretlvl@univ\BUPT@secretlvl@univfalse
+\newif\ifBUPT@secretlvl@commercial\BUPT@secretlvl@commercialfalse
 %
 \DeclareOption{open}{             % 公开级
   \BUPT@secretlvl@opentrue
@@ -59,28 +60,32 @@
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedfalse
   \BUPT@secretlvl@mostconfidentialfalse
-  \BUPT@secretlvl@univfalse}
+  \BUPT@secretlvl@univfalse
+  \BUPT@secretlvl@commercialfalse}
 \DeclareOption{control}{          % 限制级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controltrue
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedfalse
   \BUPT@secretlvl@mostconfidentialfalse
-  \BUPT@secretlvl@univfalse}  
+  \BUPT@secretlvl@univfalse
+  \BUPT@secretlvl@commercialfalse}  
 \DeclareOption{confidential}{     % 秘密级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controlfalse
   \BUPT@secretlvl@confidentialtrue
   \BUPT@secretlvl@classifiedfalse
   \BUPT@secretlvl@mostconfidentialfalse  
-  \BUPT@secretlvl@univfalse}
+  \BUPT@secretlvl@univfalse
+  \BUPT@secretlvl@commercialfalse}
 \DeclareOption{classified}{       % 机密级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controlfalse
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedtrue
   \BUPT@secretlvl@mostconfidentialfalse
-  \BUPT@secretlvl@univfalse}
+  \BUPT@secretlvl@univfalse
+  \BUPT@secretlvl@commercialfalse}
 \DeclareOption{mostconfidential}{ % 绝密级
   \BUPT@secretlvl@openfalse
   \BUPT@secretlvl@controlfalse
@@ -94,7 +99,16 @@
   \BUPT@secretlvl@confidentialfalse
   \BUPT@secretlvl@classifiedfalse
   \BUPT@secretlvl@mostconfidentialfalse
-  \BUPT@secretlvl@univtrue}
+  \BUPT@secretlvl@univtrue
+  \BUPT@secretlvl@commercialfalse}
+\DeclareOption{commercial}{ % 商业秘密
+  \BUPT@secretlvl@openfalse
+  \BUPT@secretlvl@controlfalse
+  \BUPT@secretlvl@confidentialfalse
+  \BUPT@secretlvl@classifiedfalse
+  \BUPT@secretlvl@mostconfidentialfalse
+  \BUPT@secretlvl@univfalse
+  \BUPT@secretlvl@commercialtrue}
 
 %%% 参考文献格式选项 (*sectbib*, chapbib)
 \newif\ifBUPT@sectbib\BUPT@sectbibtrue
