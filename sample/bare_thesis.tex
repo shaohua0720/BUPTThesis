@@ -1,13 +1,16 @@
 % 学位论文 : 主文件
+% 这是 BUPTThesis 文档类的论文框架文件, 使用分章参考文献格式
 % 
 % 更新记录:
 %   {$LastChangedBy$}
 %   {$LastChangedRevision$}
 %   {$LastChangedDate$}
 
-\documentclass[confidential]{BUPTThesis}
+% 更多的类选项说明请参见使用说明 userguide.pdf
+\documentclass[commercial]{BUPTThesis}
 
-% 自定义导言区
+%% 自定义导言区
+
 % 在这里添加你需要的宏包、自定义命令、环境等
 % \usepackage{...}
 % \DeclareMathOperator{\CT}{H}
@@ -16,42 +19,53 @@
 % 图片文件搜索路径
 \graphicspath{{../figure/}}
 
-% 加载缩略语定义
+%% 自定义导言区结束
+
+%% 加载缩略语定义
+%% --------------
 \loadglsentries{acronyms}
 
 \begin{document}
-% 声明前置部分
+%% 声明前置部分
 \frontmatter
 
-% 封面与摘要
+%% 封面与摘要
 \input{abstract}
 \makecover
 
-% 生成目录
+%% 生成目录
 \tableofcontents
 
-% 生成主要符号对照表
+%% 生成主要符号对照表
 \input{notations}
 
-% 主体部分
+%% 主体部分
 \mainmatter
 % 用\include{}命令引用各章.tex文件
 \include{ch01-xxx}
 % \include{ch02-yyy}
 % \include{ch03-zzz}
 
-% 附录部分
-\begin{appendix}
+%% 附录部分
+
+% 如果有两个或两个以上的附录, 使用appendix环境
+% \begin{appendix}
+%   % 自动抽取生成缩略语表作为附录A
+%   \tableofacronyms
+%   % 用\input{}添加其他的附录
+%   % \input{...}
+% \end{appendix}
+
+% 如果只有一个附录, 使用appendix*环境
+\begin{appendix*}
   % 自动抽取生成缩略语表作为附录A
   \tableofacronyms
-  % 用\input{}添加其他的附录
-  % \input{...}
-\end{appendix}
+\end{appendix*}
 
-% 致谢
+%% 致谢
 \input{ackgt}
 
-% 在读期间论文发表情况
+%% 在读期间论文发表情况
 \include{pubs}
 
 \newpage
