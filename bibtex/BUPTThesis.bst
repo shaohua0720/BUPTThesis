@@ -698,7 +698,6 @@ FUNCTION {new.sentence}
   if$
 }
 
-
 FUNCTION {new.block.checka}
 { empty$
     'skip$
@@ -1067,7 +1066,8 @@ FUNCTION {bib.type.designator} {
 FUNCTION {format.title}
 { title empty$
     { "" }
-    { title }
+    { new.block
+      title }
   if$
 }
 
@@ -1265,7 +1265,10 @@ FUNCTION {n.dashify}
 FUNCTION {format.year.volume.number} {
   year empty$
     { "" }
-    { new.block
+    { type$ "periodical" =
+	{ new.block }
+	{ mid.sentence 'output.state := }
+      if$
       year 
       volume empty$
 	'skip$
@@ -1898,7 +1901,7 @@ FUNCTION {format.address.school.year} {
 
 FUNCTION {format.note} {
   note empty$
-    { "" }
+    { new.block "" }
     { url empty$
 	{ new.block }
 	{ before.all 'output.state := }
@@ -2012,7 +2015,10 @@ FUNCTION {format.collection.editors} {
   if$
 }
 FUNCTION {format.address} {
-  new.block
+  booktitle empty$
+    { new.block }
+    { mid.sentence 'output.state := }
+  if$
   address empty$
     { "" }
     { address }
@@ -2315,19 +2321,21 @@ FUNCTION {manual}
 
 FUNCTION {misc}
 { start.entry
+
   format.authors output
-  title howpublished new.block.checkb
+%  title howpublished new.block.checkb
   format.title output
-  howpublished new.block.checka
-  howpublished output
+%  howpublished new.block.checka
+%  howpublished output
 %  format.date output
   format.address output
   format.month.year output
+  format.pages "pages" output.warn
   format.url output
-  new.block
-  note output
+%  new.block
+  format.note output
   fin.entry
-  empty.misc.check
+%  empty.misc.check
 }
 
 FUNCTION {phdthesis.type}
