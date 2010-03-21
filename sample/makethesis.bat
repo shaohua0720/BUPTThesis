@@ -25,12 +25,12 @@ REM options for dvips
 set DVIPSOPT=-D300 -t A4size -R0
 
 REM options for gs
-set PSPDFOPT=-dSAFER -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dCompatibilityLevel=1.4 -dMaxSubsetPct=100 -dSubsetFonts=true -dEmbedAllFonts=true -sPAPERSIZE=a4 -dBATCH -dNOPAUSE -sFONTMAP=Fontmap.ATB -sOutputFile=
+set PSPDFOPT=-dSAFER -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dCompatibilityLevel=1.4 -dMaxSubsetPct=100 -dSubsetFonts=true -dEmbedAllFonts=true -sPAPERSIZE=a4 -dBATCH -dNOPAUSE -sOutputFile=
 
 
 %LATEX% %TARGET%
 for %%i in %MAINMATTER% do %BIBTEX% %%i
-
+%MKIDX% -s %TARGET%.ist -t %TARGET%.alg -o %TARGET%.acr %TARGET%.acn
 %LATEX% %TARGET%
 %LATEX% %TARGET%
 %DVIPS% %DVIPSOPT% %TARGET%.dvi
