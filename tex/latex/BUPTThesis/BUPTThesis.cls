@@ -15,14 +15,14 @@
 %% $LastChangedRevision$
 
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesClass{BUPTThesis}[2007/05/27 0.1 BUPTThesis Class by Yu Zhang]
+\ProvidesClass{BUPTThesis}[2011/09/28 0.2 BUPTThesis Class by Yu Zhang]
 \typeout{-- See the "BUPTThesis_HOWTO" manual for usage information.}
 \typeout{-- http://code.google.com/p/buptthesis/}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BUPTThesis.cls 版本号, vM.m
 \def\BUPTThesisversionmajor{0}
-\def\BUPTThesisversionminor{1}
+\def\BUPTThesisversionminor{2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 类名 BUPT-Thesis 的排版命令
@@ -300,7 +300,8 @@
 \RequirePackage{bibentry}
 \ifBUPT@chapbib
 \RequirePackage[square,super,numbers,sort&compress]{natbib}
-\RequirePackage{hypernat}
+%% hyperref 和 natbib 已经配合很好，hypernat 宏包不再需要了。
+% \RequirePackage{hypernat}
 \else
 \RequirePackage[sectionbib,square,super,numbers,sort&compress]{natbib}
 \RequirePackage{hypernat}
