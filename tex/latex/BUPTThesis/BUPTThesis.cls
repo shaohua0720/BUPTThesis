@@ -183,16 +183,24 @@
   \BUPT@dedicationtrue
 }
 
-%%% 后台驱动 (*dvips*, dvipdf)
+%%% 后台驱动 (*dvips*, dvipdf, pdftex)
 \newif\ifBUPT@dvips\BUPT@dvipstrue
 \newif\ifBUPT@dvipdf\BUPT@dvipdffalse
+\newif\ifBUPT@pdftex\BUPT@pdftexfalse
 \DeclareOption{dvips}{%
   \BUPT@dvipstrue
   \BUPT@dvipdffalse
+  \BUPT@pdftexfalse
 }
 \DeclareOption{dvipdf}{%
   \BUPT@dvipsfalse
   \BUPT@dvipdftrue
+  \BUPT@pdftexfalse
+}
+\DeclareOption{pdftex}{%
+  \BUPT@dvipsfalse
+  \BUPT@dvipdffalse
+  \BUPT@pdftextrue
 }
 
 %%% 设置默认类选项 (博士学位, 公开级, 参考文献列于各章末尾, 无题名页, 打印版本, dvips)
@@ -263,9 +271,11 @@
 %%% 图形支持
 \ifBUPT@dvips                    % 如果使用 dvips 作为后台驱动
 \RequirePackage[dvips]{graphicx} % 使用 dvips 驱动的 graphicx 宏包
-\else                            % 否则使用 dvipdf 作为后台驱动
-\RequirePackage[dvipdf]{graphicx}
-\fi
+\else\ifBUPT@dvipdf              % 如果使用 dvipdf 作为后台驱动
+\RequirePackage[dvipdf]{graphicx} % 使用 dvipdf 作为后台驱动
+\else                             % 否则使用 pdftex 作为后台驱动
+\RequirePackage[pdftex]{graphicx}
+\fi\fi
 \RequirePackage{subfigure}       % 使用 subfigure 宏包处理子图
 
 %%% 首行缩进
@@ -322,9 +332,11 @@
 % 加载 hyperref 宏包
 \ifBUPT@dvips
 \RequirePackage[unicode,a4paper,dvips,bookmarksopen=true,colorlinks=true]{hyperref}
-\else
+\else\ifBUPT@dvipdf
 \RequirePackage[unicode,a4paper,dvipdfm,bookmarksopen=true,colorlinks=true]{hyperref}
-\fi
+\else
+\RequirePackage[unicode,a4paper,pdftex,bookmarksopen=true,colorlinks=true]{hyperref}
+\fi\fi
 % 根据是否是打印版本设置 hyperref 超链接的颜色
 \ifBUPT@online                  % 对于 online 版本超链接用彩色
 \hypersetup{%
